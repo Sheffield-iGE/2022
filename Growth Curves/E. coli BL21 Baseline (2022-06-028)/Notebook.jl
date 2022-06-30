@@ -26,17 +26,17 @@ end
 
 # ╔═╡ 55b510e1-0b96-42ca-b940-0705f329d058
 # Construct a line-scatter plot, grouping by biological replicate
-plot(pdf, x=:Time, y=:OD, color=:Replicate,
+plot(pdf, x=:Time, y=:OD, color=:Replicate, Scale.y_log2,
      Guide.xlabel("Minutes"), Guide.ylabel("OD₆₀₀"),
      Guide.title("<i>E. Coli</i> Growth Curves"))
 
 # ╔═╡ dc9c6b75-860d-458f-8e12-849378e40a0d
 # Trim the data to take a closer look at log-phase
-logdf = filter(:Time => >=(140), pdf)
+logdf = filter(:Time => t -> 60 <= t <= 120, pdf)
 
 # ╔═╡ abf42aad-85fc-4946-9dd3-0a81b41e9270
 # And then plot it
-plot(logdf, x=:Time, y=:OD, color=:Replicate,
+plot(logdf, x=:Time, y=:OD, color=:Replicate, Scale.y_log2,
      Guide.xlabel("Minutes"), Guide.ylabel("OD₆₀₀"),
      Guide.title("<i>E. Coli</i> Growth Curves"))
 
@@ -52,9 +52,9 @@ avgdf = combine(gdf, :OD => (x -> [mean(x) std(x)]) => [:OD, :Std])
 # Err, we need to do some actual regression and confidence intervals...
 # But for now:
 begin
-	N₀ = 10^avgdf[1, :OD]
-	N = 10^avgdf[3, :OD]
-	t = avgdf[3, :Time] - avgdf[1, :Time]
+	N₀ = avgdf[1, :OD]
+	N = avgdf[end, :OD]
+	t = avgdf[end, :Time] - avgdf[1, :Time]
 	tD = t / log2(N/N₀)
 end
 
