@@ -6,11 +6,11 @@ using InteractiveUtils
 
 # ╔═╡ 370dae6a-3334-44e2-bda3-30878e970b92
 # Import some helpful packages for loading and plotting data
-using CSV, Dates, DataFrames, Gadfly, Statistics
+using CSV, Dates, DataFrames, Gadfly, GLM, Statistics
 
 # ╔═╡ 96b5af19-0d96-4cf4-bb4d-48cf6aa44c65
-# Load CSV into a DataFrame
 begin
+	# Load CSV into a DataFrame
 	csvfile = "Growth Curve Data.csv"
 	df = DataFrame(CSV.File(csvfile))
 end
@@ -20,42 +20,82 @@ begin
 	# Normalise times and convert to minutes
 	start = df[1, :Time]
 	pdf = transform(df, :Time => ByRow(t -> Dates.value(Minute(t - start))) => :Time)
-	# Replicates aren't on a continuous scale, convert them to Strings
-	pdf = transform(pdf, :Replicate => ByRow(string) => :Replicate)
 end
+
+# ╔═╡ ee0b9524-5c79-4048-96b8-527a54712629
+md"## Growth Curve Data
+
+Given that OD is proportional to cell count (when properly diluted so that readings don't exceed 0.6), it can be used to track the growth of cells.
+
+On a linear scale, this growth curve is an exponential, but be later made linear by applying a logarithmic transformation.
+"
 
 # ╔═╡ 55b510e1-0b96-42ca-b940-0705f329d058
 # Construct a line-scatter plot, grouping by biological replicate
-plot(pdf, x=:Time, y=:OD, color=:Replicate, Scale.y_log2,
+plot(pdf, x=:Time, y=:OD, color=:Replicate, Scale.color_discrete_hue,
      Guide.xlabel("Minutes"), Guide.ylabel("OD₆₀₀"),
+     Guide.title("<i>E. Coli</i> Growth Curves"))
+
+# ╔═╡ 5aad65f2-1559-4613-b559-882cf1d641fb
+md"A log transformation reveals that the region between `60` and `120` minutes can be safely said to be linear"
+
+# ╔═╡ 54eeb0d4-1058-4d2c-9093-d437132b5f86
+# Replot, but on a log-scale so that we can pick out the exponential growth region
+plot(pdf, x=:Time, y=:OD, color=:Replicate,
+	 Scale.color_discrete_hue, Scale.y_log2,
+	 Guide.xlabel("Minutes"), Guide.ylabel("OD₆₀₀"),
      Guide.title("<i>E. Coli</i> Growth Curves"))
 
 # ╔═╡ dc9c6b75-860d-458f-8e12-849378e40a0d
 # Trim the data to take a closer look at log-phase
 logdf = filter(:Time => t -> 60 <= t <= 120, pdf)
 
+# ╔═╡ 542d02b1-51f2-40f2-bbaa-94c758e4406a
+# Log-transform the OD data
+transform!(logdf, :OD => ByRow(log2) => :OD)
+
+# ╔═╡ 8080c6da-094e-41e7-bbd4-b1b22cb00bb9
+# Perform and ordinary least-squares regression for a linear model
+ols = lm(@formula(OD ~ Time), logdf)
+
+# ╔═╡ 60e72978-49e7-4773-bba1-a6c28be99eeb
+# Insert a new column into our dataframe representing the model predictions
+logdf[!,:Model] = predict(ols)
+
 # ╔═╡ abf42aad-85fc-4946-9dd3-0a81b41e9270
-# And then plot it
-plot(logdf, x=:Time, y=:OD, color=:Replicate, Scale.y_log2,
-     Guide.xlabel("Minutes"), Guide.ylabel("OD₆₀₀"),
-     Guide.title("<i>E. Coli</i> Growth Curves"))
+# And then plot it on a log-scale
+plot(logdf, x=:Time, y=:OD, color=:Replicate,
+	 Scale.color_discrete_hue, Geom.point,
+	 Guide.xlabel("Minutes"), Guide.ylabel("OD₆₀₀"),
+	 Guide.title("<i>E. Coli</i> Growth Curves"),
+	 # With the line-of-best-fit superimpoosed
+	 layer(x=:Time, y=:Model, Geom.line))
 
-# ╔═╡ c8ae27dc-214a-494d-b7f1-8c2bc00ea2b2
-# Group by each time-point
-gdf = groupby(logdf, :Time)
+# ╔═╡ c975c4b0-93d9-4cc9-b5e0-070b6bec3d04
+md"## Calculating Doubling-Time From Our Model
 
-# ╔═╡ 430b7f3c-6562-40d7-9868-f781ca03036e
-# Then recombine, averaging the ODs and calculating std
-avgdf = combine(gdf, :OD => (x -> [mean(x) std(x)]) => [:OD, :Std])
+We can start with a fundamental equation that models the growth of microbes undergoing binary fission: 
 
-# ╔═╡ ca37f1ed-6928-4528-b78e-84bca576640c
-# Err, we need to do some actual regression and confidence intervals...
-# But for now:
+$N = N_0 2^{\frac{t}{g}}$
+
+Where $N$ is the current number of cells, $N_0$ is the initial number of cells, $t$ is time, and $g$ is generation or doubling-time. We want to rearrange this equation to fit the model `OD ~ Time` after calculating the $\log_2$ of all ODs.
+
+Let's start by applying the $\log_2$ to both sides of the equation:
+
+$\log_2{N} = \log_2{N_0} + \frac{t}{g}$
+
+Ignoring the intercept and separating terms, we get an expression that matches our model:
+
+$\log_2{N} = \frac{1}{g} t$
+
+Therefore we can conclude that $g$ is equal to the reciprocal of our regression gradient."
+
+# ╔═╡ 290a93be-92f8-4a56-88b9-cfff40c088db
 begin
-	N₀ = avgdf[1, :OD]
-	N = avgdf[end, :OD]
-	t = avgdf[end, :Time] - avgdf[1, :Time]
-	tD = t / log2(N/N₀)
+	# Calculate doubling-time
+	g = 1/coef(ols)[2]
+	# Format it into a nice string
+	md"The doubling time was ~$(round(g, sigdigits=3)) minutes"
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
@@ -64,12 +104,14 @@ PLUTO_PROJECT_TOML_CONTENTS = """
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+GLM = "38e38edf-8417-5370-95a0-9cbb8c7f171a"
 Gadfly = "c91e804a-d5a3-530f-b6f0-dfbca275c004"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 
 [compat]
 CSV = "~0.10.4"
 DataFrames = "~1.3.4"
+GLM = "~1.8.0"
 Gadfly = "~1.3.4"
 """
 
@@ -298,6 +340,12 @@ version = "0.4.2"
 [[deps.Future]]
 deps = ["Random"]
 uuid = "9fa8497b-333b-5362-9e8d-4d0656e87820"
+
+[[deps.GLM]]
+deps = ["Distributions", "LinearAlgebra", "Printf", "Reexport", "SparseArrays", "SpecialFunctions", "Statistics", "StatsBase", "StatsFuns", "StatsModels"]
+git-tree-sha1 = "039118892476c2bf045a43b88fcb75ed566000ff"
+uuid = "38e38edf-8417-5370-95a0-9cbb8c7f171a"
+version = "1.8.0"
 
 [[deps.Gadfly]]
 deps = ["Base64", "CategoricalArrays", "Colors", "Compose", "Contour", "CoupledFields", "DataAPI", "DataStructures", "Dates", "Distributions", "DocStringExtensions", "Hexagons", "IndirectArrays", "IterTools", "JSON", "Juno", "KernelDensity", "LinearAlgebra", "Loess", "Measures", "Printf", "REPL", "Random", "Requires", "Showoff", "Statistics"]
@@ -618,6 +666,11 @@ uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
 deps = ["Distributed", "Mmap", "Random", "Serialization"]
 uuid = "1a1011a3-84de-559e-8e89-a11a2f7dc383"
 
+[[deps.ShiftedArrays]]
+git-tree-sha1 = "22395afdcf37d6709a5a0766cc4a5ca52cb85ea0"
+uuid = "1277b4bf-5013-50f5-be3d-901d8477a67a"
+version = "1.0.0"
+
 [[deps.Showoff]]
 deps = ["Dates", "Grisu"]
 git-tree-sha1 = "91eddf657aca81df9ae6ceb20b959ae5653ad1de"
@@ -675,6 +728,12 @@ deps = ["ChainRulesCore", "HypergeometricFunctions", "InverseFunctions", "Irrati
 git-tree-sha1 = "5783b877201a82fc0014cbf381e7e6eb130473a4"
 uuid = "4c63d2b9-4356-54db-8cca-17b64c39e42c"
 version = "1.0.1"
+
+[[deps.StatsModels]]
+deps = ["DataAPI", "DataStructures", "LinearAlgebra", "Printf", "REPL", "ShiftedArrays", "SparseArrays", "StatsBase", "StatsFuns", "Tables"]
+git-tree-sha1 = "4352d5badd1bc8bf0a8c825e886fa1eda4f0f967"
+uuid = "3eaba693-59b7-5ba5-a881-562e759f1c8d"
+version = "0.6.30"
 
 [[deps.SuiteSparse]]
 deps = ["Libdl", "LinearAlgebra", "Serialization", "SparseArrays"]
@@ -750,11 +809,16 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╠═370dae6a-3334-44e2-bda3-30878e970b92
 # ╠═96b5af19-0d96-4cf4-bb4d-48cf6aa44c65
 # ╠═b2f6bdf0-fe8a-4444-91c9-69a8029f6430
+# ╟─ee0b9524-5c79-4048-96b8-527a54712629
 # ╠═55b510e1-0b96-42ca-b940-0705f329d058
+# ╟─5aad65f2-1559-4613-b559-882cf1d641fb
+# ╠═54eeb0d4-1058-4d2c-9093-d437132b5f86
 # ╠═dc9c6b75-860d-458f-8e12-849378e40a0d
+# ╠═542d02b1-51f2-40f2-bbaa-94c758e4406a
+# ╠═8080c6da-094e-41e7-bbd4-b1b22cb00bb9
+# ╠═60e72978-49e7-4773-bba1-a6c28be99eeb
 # ╠═abf42aad-85fc-4946-9dd3-0a81b41e9270
-# ╠═c8ae27dc-214a-494d-b7f1-8c2bc00ea2b2
-# ╠═430b7f3c-6562-40d7-9868-f781ca03036e
-# ╠═ca37f1ed-6928-4528-b78e-84bca576640c
+# ╟─c975c4b0-93d9-4cc9-b5e0-070b6bec3d04
+# ╠═290a93be-92f8-4a56-88b9-cfff40c088db
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
