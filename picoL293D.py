@@ -5,6 +5,7 @@ pwmPIN=16
 cwPin=14 
 acwPin=15
 
+#current volumetric flowrate = 60mL/min
 def motorMove(speed,direction,speedGP,cwGP,acwGP):
   if speed > 100: speed=100
   if speed < 0: speed=0
