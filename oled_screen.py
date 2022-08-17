@@ -42,13 +42,16 @@ display = ssd1306.SSD1306_I2C(128, 32, i2c)
  
 #   sleep(3)
 
-#while True:
 photoPIN = 26
 def readLight(photoGP):
     photoRes = ADC(Pin(26))
     light = photoRes.read_u16()
-    light = round(light/65535*100,2)
+    light = round(light/65535*100)
     return 100-light
-display.text("light: " + str(readLight(photoPIN)) + "%", 5, 5, 1)
-display.show()
+
+while True: 
+    display.fill(0)
+    display.text("light: " + str(readLight(photoPIN)) + "%", 5, 5, 1)
+    display.show()
+    sleep(0.3)
 
