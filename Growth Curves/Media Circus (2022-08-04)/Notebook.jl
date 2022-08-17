@@ -49,8 +49,23 @@ plot(pdf, x=:Time, y=:OD, color=:Replicate,
      Guide.title("<i>V. Natriegens</i> Growth Curves"))
 
 # ╔═╡ dc9c6b75-860d-458f-8e12-849378e40a0d
+# Group by replicate / media
+gdf = groupby(pdf, :Replicate)
+
+# ╔═╡ ed22a327-aba2-421b-9dfb-b2b30ba01e9c
+begin
+	# Pick a replicate to zero in on
+	curve = 25
+	# Replot, but focusing on a single curve
+	plot(gdf[curve], x=:Time, y=:OD, color=:Replicate,
+		 Scale.color_discrete_hue, Scale.y_log2,
+		 Guide.xlabel("Minutes"), Guide.ylabel("log₂(OD₆₀₀)"),
+	     Guide.title("<i>V. Natriegens</i> Growth Curves"))
+end
+
+# ╔═╡ f4a76b84-f624-4c9d-ac4a-3ada4e96a721
 # Trim the data to take a closer look at log-phase
-logdf = filter(:Time => t -> 60 <= t <= 120, pdf)
+logdf = filter(:Time => t -> 40 <= t <= 140, gdf[curve])
 
 # ╔═╡ 542d02b1-51f2-40f2-bbaa-94c758e4406a
 # Log-transform the OD data
@@ -97,7 +112,7 @@ begin
 	# Calculate doubling-time
 	g = 1/coef(ols)[2]
 	# Format it into a nice string
-	md"The doubling time was ~$(round(g, sigdigits=3)) minutes"
+	md"The doubling time was ~$(round(g, sigdigits=3)) minutes, and the growth rate was $(round(coef(ols)[2], sigdigits=3))"
 end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
@@ -816,6 +831,8 @@ uuid = "3f19e933-33d8-53b3-aaab-bd5110c3b7a0"
 # ╟─5aad65f2-1559-4613-b559-882cf1d641fb
 # ╠═54eeb0d4-1058-4d2c-9093-d437132b5f86
 # ╠═dc9c6b75-860d-458f-8e12-849378e40a0d
+# ╠═ed22a327-aba2-421b-9dfb-b2b30ba01e9c
+# ╠═f4a76b84-f624-4c9d-ac4a-3ada4e96a721
 # ╠═542d02b1-51f2-40f2-bbaa-94c758e4406a
 # ╠═8080c6da-094e-41e7-bbd4-b1b22cb00bb9
 # ╠═60e72978-49e7-4773-bba1-a6c28be99eeb
