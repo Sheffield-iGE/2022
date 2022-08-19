@@ -8,7 +8,7 @@ IN2 = Pin(3, Pin.OUT)
 speed = PWM(Pin(5))
 speed.freq(1000)
 
-while True:
+while ds_sensor.read_temp(rom) < 37:
         speed.duty_u16(10000)
         IN1.low()  
         IN2.high()
