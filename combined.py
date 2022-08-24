@@ -1,5 +1,5 @@
 from time import sleep
-from machine import Pin, PWM
+from machine import Pin, PWM, ADC
 import onewire, ds18x20, time
 
 #servo motor
@@ -35,6 +35,14 @@ def motorMove(speed,direction,speedGP,cwGP,acwGP):
 ds_pin = machine.Pin(21) 
 ds_sensor = ds18x20.DS18X20(onewire.OneWire(ds_pin))
 roms = ds_sensor.scan()
+
+#phototransistor
+photoPIN = 26
+def readLight(photoGP):
+    photoRes = ADC(Pin(26))
+    light = photoRes.read_u16()
+    light = round(light/65535*100,2)
+    return 100-light
 
 while True:
     ds_sensor.convert_temp() #heating
