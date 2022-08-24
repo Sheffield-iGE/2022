@@ -2,22 +2,27 @@ from time import sleep
 import combined, ds18x20, onewire, asyncio
 
 while True:
-#servo motor
-    servomove(-100) 
+    combined.servomove(-100) 
     sleep(5)
-    servomove(50)
+    combined.servomove(50)
     sleep(3)
-    servomove(100)
+    combined.servomove(100)
     sleep(5)
-    servomove(50)
-#heating controller
-    for rom in roms:
-        print(round(ds_sensor.read_temp(rom), 1))
-        
-    time.sleep(0.3)
-    if ds_sensor.read_temp(rom) < 32:
-        motorMove(100,1,pwmPIN,cwPin,acwPin)
+    combined.servomove(50)
+    for rom in combined.roms:
+        display.fill(0)
+        ds_sensor.convert_temp()
+        display.text("light: " + str(combined.readLight(combined.photoPIN)) + "%", 5, 5, 1)
+        display.text("temp : " + str(round(combined.ds_sensor.read_temp(rom), 1)) + "C", 5, 14, 1)
+        display.show()
+        sleep(0.3)   
+    if combined.ds_sensor.read_temp(rom) < 38:
+        combined.motorMoveheat(100,1,combined.pwmheat,combined.cwPinheat,combined.acwPinheat)
         print("ON")
     else:
-        motorMove(0,0,pwmPIN,cwPin,acwPin)
+        combined.motorMoveheat(0,0,combined.pwmheat,combined.cwPinheat,combined.acwPinheat)
         print("OFF")
+    if combined.readLight(combined.photoPIN) > 50:
+        speed = combined.adcpump.read_u16()
+        combined.motorMovepump(speed/65535*100, 1, combined.pwmpump, combined.cwPinpump, combined.acwPinpump)
+        print(combined.adcpump.read_u16())
