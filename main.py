@@ -1,9 +1,9 @@
 from time import sleep
 import combined, ds18x20, onewire, asyncio
 
-#servo motor
 while True:
-    servomove(-100)
+#servo motor
+    servomove(-100) 
     sleep(5)
     servomove(50)
     sleep(3)
