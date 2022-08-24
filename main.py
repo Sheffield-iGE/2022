@@ -11,7 +11,6 @@ while True:
     combined.servomove(50)
     for rom in combined.roms:
         display.fill(0)
-        ds_sensor.convert_temp()
         display.text("light: " + str(combined.readLight(combined.photoPIN)) + "%", 5, 5, 1)
         display.text("temp : " + str(round(combined.ds_sensor.read_temp(rom), 1)) + "C", 5, 14, 1)
         display.show()
