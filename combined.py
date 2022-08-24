@@ -1,6 +1,6 @@
 from time import sleep
 from machine import Pin, PWM, ADC
-import onewire, ds18x20, time
+import onewire, ds18x20
 
 #servo motor
 pwmservo = PWM(Pin(1))
