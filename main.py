@@ -1,5 +1,5 @@
 from time import sleep
-import combined, ds18x20, onewire, asyncio
+import combined
 
 while True:
     combined.servomove(-100) 
@@ -14,7 +14,7 @@ while True:
         display.text("light: " + str(combined.readLight(combined.photoPIN)) + "%", 5, 5, 1)
         display.text("temp : " + str(round(combined.ds_sensor.read_temp(rom), 1)) + "C", 5, 14, 1)
         display.show()
-        sleep(0.3)   
+        sleep(0.3)
     if combined.ds_sensor.read_temp(rom) < 38:
         combined.motorMoveheat(100,1,combined.pwmheat,combined.cwPinheat,combined.acwPinheat)
         print("ON")
