@@ -11,10 +11,9 @@ while True:
     sleep(5)
     servomove(50)
 #heating controller
-    ds_sensor.convert_temp()
-    time.sleep_ms(750)
     for rom in roms:
         print(round(ds_sensor.read_temp(rom), 1))
+        
     time.sleep(0.3)
     if ds_sensor.read_temp(rom) < 32:
         motorMove(100,1,pwmPIN,cwPin,acwPin)
