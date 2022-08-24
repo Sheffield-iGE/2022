@@ -68,3 +68,7 @@ def motorMovepump(speedpump,directionpump,speedGPpump,cwGPpump,acwGPpump):
   if directionpump > 0:
       cwpump.value(1)
       acwpump.value(0)
+
+#oled display
+i2c = I2C(0, sda=Pin(12), scl=Pin(9))
+display = ssd1306.SSD1306_I2C(128, 32, i2c) 
