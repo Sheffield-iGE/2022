@@ -166,7 +166,7 @@ plot(nglogdf, x=:Time, y=:OD, color=:Replicate,
 
 # ╔═╡ c13cd653-c7a1-474b-8577-a999e786cbcc
 # Trim the data to take a closer look at log-phase
-tnglogdf = filter(:Time => t -> 27 <= t <= 92, nglogdf)
+tnglogdf = filter(:Time => t -> 27 <= t <= 108, nglogdf)
 
 # ╔═╡ e99cd7ce-35da-4b14-9399-7440b7397c8d
 # Log-transform the OD data
@@ -210,7 +210,7 @@ plot(glogdf, x=:Time, y=:OD, color=:Replicate,
 
 # ╔═╡ 1f323925-70e5-471c-b824-1a185a5e0c31
 # Trim the data to take a closer look at log-phase
-tglogdf = filter(:Time => t -> 52 <= t <= 97, glogdf)
+tglogdf = filter(:Time => t -> 32 <= t <= 113, glogdf)
 
 # ╔═╡ a1e760c3-9951-47ae-8a87-83143fda6a30
 # Log-transform the OD data
