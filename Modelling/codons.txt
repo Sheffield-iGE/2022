@@ -1,0 +1,186 @@
+Regular Codons
+==============
+
+TTT => F
+TTC => F
+TTA => L
+TTG => L
+
+TCT => S
+TCC => S
+TCA => S
+TCG => S
+
+TAT => Y
+TAC => Y
+TAA => *
+TAG => *
+
+TGT => C
+TGC => C
+TGA => *
+TGG => W
+
+CTT => L
+CTC => L
+CTA => L
+CTG => L
+
+CCT => P
+CCC => P
+CCA => P
+CCG => P
+
+CAT => H
+CAC => H
+CAA => Q
+CAG => Q
+
+CGT => R
+CGC => R
+CGA => R
+CGG => R
+
+ATT => I
+ATC => I
+ATA => I
+ATG => M
+
+ACT => T
+ACC => T
+ACA => T
+ACG => T
+
+AAT => N
+AAC => N
+AAA => K
+AAG => K
+
+AGT => S
+AGC => S
+AGA => R
+AGG => R
+
+GTT => V
+GTC => V
+GTA => V
+GTG => V
+
+GCT => A
+GCC => A
+GCA => A
+GCG => A
+
+GAT => D
+GAC => D
+GAA => E
+GAG => E
+
+GGT => G
+GGC => G
+GGA => G
+GGG => G
+
+Purine (1) / Pyramidine (2) Codons
+==================================
+
+222 => F
+222 => F
+221 => L
+221 => L
+
+222 => S
+222 => S
+221 => S
+221 => S
+
+212 => Y
+212 => Y
+211 => *
+211 => *
+
+212 => C
+212 => C
+211 => *
+211 => W
+
+222 => L
+222 => L
+221 => L
+221 => L
+
+222 => P
+222 => P
+221 => P
+221 => P
+
+212 => H
+212 => H
+211 => Q
+211 => Q
+
+212 => R
+212 => R
+211 => R
+211 => R
+
+122 => I
+122 => I
+121 => I
+121 => M
+
+122 => T
+122 => T
+121 => T
+121 => T
+
+112 => N
+112 => N
+111 => K
+111 => K
+
+112 => S
+112 => S
+111 => R
+111 => R
+
+122 => V
+122 => V
+121 => V
+121 => V
+
+122 => A
+122 => A
+121 => A
+121 => A
+
+112 => D
+112 => D
+111 => E
+111 => E
+
+112 => G
+112 => G
+111 => G
+111 => G
+
+Codon Mutation Sets
+===================
+
+111 => [E, G, K, R]
+
+112 => [D, G, N, S]
+
+# The M here is the start codon!
+121 => [A, I, M, T, V]
+
+122 => [A, I, T, V]
+
+211 => [*, Q, R, W]
+
+212 => [C, H, R, Y]
+
+221 => [L, P, S]
+
+222 => [F, L, P, S]
+
