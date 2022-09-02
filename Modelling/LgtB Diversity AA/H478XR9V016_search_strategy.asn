@@ -1,0 +1,146 @@
+Blast4-request ::= {
+  body queue-search {
+    program "blastx",
+    service "plain",
+    queries bioseq-set {
+      seq-set {
+        seq {
+          id {
+            local str "Query_86123"
+          },
+          descr {
+            user {
+              type str "CFastaReader",
+              data {
+                {
+                  label str "DefLine",
+                  data str ">"
+                }
+              }
+            },
+            molinfo {
+              biomol genomic
+            }
+          },
+          inst {
+            repr raw,
+            mol dna,
+            length 3266,
+            seq-data ncbi2na '93DFE1A6E3AC3A6823965B0040165E05E78167E92240E066
+B2584D99FFA98B05BEC4B50396DE097D06936E5CDA88303E497F2D26CF8FE65C41B20033F65434
+F2596DB83487E9907E88FF8FB63869D8486B19F94F9526FD4204A1ADB35935D9925190F5ADE3D5
+DFC04DA9E860FA40B4A0EAA0CCF9191639618CF965561E8F88036EA623A002164934F94EAE6E9E
+82FFB68200A1A4169E99A4D1291A403FA0025856918233E587FF57F6905731104118E3CE69926D
+3E1A6BF9BC411626A3EA6823C50FFAC63B4903EA427A7CF356097EB40C597D19434AFD3503124D
+650460366429350005948063FFE4B73ABFC015AF6125F83165030092C9B383E7A2013F968208FF
+8199596BFFB1439F40686846595969BBA7A3FE6921A4A39A69EFC5F8A431F693FE45A78F00165A
+4A66B68F692A0204A23F0E40146F349F27D6592064A9913E5905F69999A4D5BF4BFF6191E396DE
+029E81290E9A076D569FB6991573F89A2E800979FCE25196CFBA01293E860ADE5B3365B3F8A186
+FF1DA60A66880F5F960867E9C02067F8558F597F36D67E8063BF391B5E176575AEE9A1C79A9B97
+F59EFA026047AA869A9CCD3F560098E6BFF5E413F6C3BE4968123005CD87C38EF4B8FFF630A2A8
+E5EFCD2B4B5A5F3995089E4F3942FD185004993EA4978D81185975E05901240A663D5594113D01
+965E35997E1403492A02A0019690299812F4FB97F50C028A223A136CFE4921A4A39A69EFC5F8A4
+31F693FE658F9E0016F800659FCD41210004A303CE40146F349F27D6592064A9913E58C5F69291
+84F5BF4BFF6191E396DE081E0DAB8E9A0FAE5A8FA401245EF8982E800979FCE251B6CFBA01293E
+860A6C5B3BE5B3F8A38EDF1DA60AA6880F5F960869E9C0226BF8568F597F36D6FE8063BF980BCF
+B485A302D783CE005AD3F5FE7A22604FAA869E9CCD3F66E298E6BFF7E80AFE5BFE5A48BA3C09AC
+8FA38EFC7CFDFE30A2A8E5EFCD2BC3565F3B15083E4F3942F5D2C004B3BEAC98FE8008CA810808
+21165BDBE0AC3BF87E09B9FEAC0F6B2200820083A26D02929A27E2027C6929AB4CDBD032FEEC03
+3268F00F203A311ED3D5980BA8352D6F8BF4B4FD630345906F03F723D59FF9A83869AA8FDEFFD6
+103D7007C03D6F3D5988120050'H
+          }
+        }
+      }
+    },
+    subject database "nr",
+    algorithm-options {
+      {
+        name "WordSize",
+        value integer 6
+      },
+      {
+        name "WordThreshold",
+        value integer 21
+      },
+      {
+        name "EvalueThreshold",
+        value cutoff e-value { 5, 10, -2 }
+      },
+      {
+        name "UngappedMode",
+        value boolean FALSE
+      },
+      {
+        name "PercentIdentity",
+        value real { 0, 10, 0 }
+      },
+      {
+        name "HitlistSize",
+        value integer 5000
+      },
+      {
+        name "EffectiveSearchSpace",
+        value big-integer 0
+      },
+      {
+        name "DbLength",
+        value big-integer 0
+      },
+      {
+        name "WindowSize",
+        value integer 40
+      },
+      {
+        name "SegFiltering",
+        value boolean TRUE
+      },
+      {
+        name "MaskAtHash",
+        value boolean FALSE
+      },
+      {
+        name "SegFilteringWindow",
+        value integer 12
+      },
+      {
+        name "SegFilteringLocut",
+        value real { 22, 10, -1 }
+      },
+      {
+        name "SegFilteringHicut",
+        value real { 25, 10, -1 }
+      },
+      {
+        name "MatrixName",
+        value string "BLOSUM62"
+      },
+      {
+        name "GapOpeningCost",
+        value integer 11
+      },
+      {
+        name "GapExtensionCost",
+        value integer 1
+      },
+      {
+        name "StrandOption",
+        value strand-type both-strands
+      },
+      {
+        name "QueryGeneticCode",
+        value integer 1
+      },
+      {
+        name "CompositionBasedStats",
+        value integer 2
+      }
+    },
+    format-options {
+      {
+        name "Web_JobTitle",
+        value string "Nucleotide Sequence"
+      }
+    }
+  }
+}
+
