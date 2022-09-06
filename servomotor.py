@@ -19,10 +19,9 @@ def servomove(power):
     pwm.duty_u16(int((power/100)*1638.375+4915.125))
 
 while True:
-    servomove(-100)
-    sleep(5)
-    servomove(50)
-    sleep(3)
-    servomove(100)
-    sleep(5)
-    servomove(50)
+#     servomove(-100)
+#     sleep(5)
+    servomove(0)
+#     sleep(3)
+#     servomove(100)
+#     sleep(5)
