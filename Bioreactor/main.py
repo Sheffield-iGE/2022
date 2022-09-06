@@ -4,18 +4,18 @@ from drivers import *
 stirringtimer = time()
 
 while True:
-#     now = time()
-#     if now-stirringtimer < 5:
-#         servomove(-100) 
-#     elif now-stirringtimer < 8:
-#         servomove(0)
-#     elif now-stirringtimer < 13:
-#         servomove(100)
-#     elif now-stirringtimer < 16:
-#         servomove(0)
-#     else:
-#         stirringtimer = time()
-#     print(now-stirringtimer)
+    now = time()
+    if now-stirringtimer < 5:
+        servomove(-100) 
+    elif now-stirringtimer < 8:
+        servomove(0)
+    elif now-stirringtimer < 13:
+        servomove(100)
+    elif now-stirringtimer < 16:
+        servomove(0)
+    else:
+        stirringtimer = time()
+    print(now-stirringtimer)
     display.fill(0)
     display.text("light: " + str(round(readLight(), 2)) + "%", 5, 5, 1)
     display.text("temp : " + str(round(readTemp(), 1)) + "C", 5, 14, 1)
