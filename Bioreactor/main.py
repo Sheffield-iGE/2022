@@ -22,28 +22,38 @@ while True:
     display.show()
     sleep(0.3)
     
-    esum = 0
-    target_temp = 37
-    p = 1
-    i = 0.01
-    error = target_temp - readTemp()
-    esum += error
-    heatingPower((p * error + i * esum) * 10)
-    print(p + error + i * esum)
+#     esum = 0
+#     target_temp = 37
+#     p = 1
+#     i = 0.01
+#     error = target_temp - readTemp()
+#     esum += error
+#     heatingPower((p * error + i * esum) * 10)
+#     print(p + error + i * esum)
 
-    if readTemp() < 35:
+    if readTemp() < 36.8:
         heatingPower(100)
-    elif readTemp() < 37:
+#     elif readTemp() < 37:
+#         esum = 0
+#         target_temp = 37
+#         p = 1
+#         i = 0.01
+#         error = target_temp - readTemp()
+#         esum += error
+#         heatingPower((p * error + i * esum) * 10)
+#         print(p + error + i * esum)
+    elif readTemp() > 38:
+        heatingPower(0)
+    else:
         esum = 0
         target_temp = 37
         p = 1
         i = 0.01
         error = target_temp - readTemp()
         esum += error
-        heatingPower((p * error + i * esum) * 10)
-        print(p + error + i * esum)
-    elif readTemp() > 38:
-        heatingPower(0)
+        heatingPower((p * error + i * esum) * 100)
+        print((p * error + i * esum) * 100)
+    print(readLight())
     if readLight() < 50:
         speed = adcpump.read_u16()
         pumpPower(speed/65535*100)
