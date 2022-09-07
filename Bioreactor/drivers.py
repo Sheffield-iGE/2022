@@ -2,6 +2,7 @@ from machine import Pin, PWM, ADC, I2C
 import onewire
 import ds18x20
 import ssd1306
+import math
 
 # servo motor
 pwmservo = PWM(Pin(1))
@@ -76,8 +77,10 @@ def readLight():
     photoRes = ADC(Pin(photoPIN))
     light = photoRes.read_u16()
     light = round(light/65535*100, 2)
-    od = -log((100-light)/100)
+    od = -math.log10((100-light)/100)
     return od
+
+print(readLight())
 
 
 # oled display
