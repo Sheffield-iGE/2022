@@ -76,7 +76,8 @@ def readLight():
     photoRes = ADC(Pin(photoPIN))
     light = photoRes.read_u16()
     light = round(light/65535*100, 2)
-    return 100-light
+    od = -log((100-light)/100)
+    return od
 
 
 # oled display
