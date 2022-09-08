@@ -1,4 +1,4 @@
-from machine import Pin, PWM
+from machine import Pin, PWM, ADC
 from time import sleep
 
 adc = ADC(Pin(27))
@@ -33,13 +33,13 @@ def motorMove(speed,direction,speedGP,cwGP,acwGP):
 #motorMove(100,0,pwmPIN,cwPin,acwPin)
 
 #controlling using potentiometer
-while True:
-    speed = adc.read_u16()
-    motorMove(speed/65535*100, 1, pwmPIN, cwPin, acwPin)
-    print(adc.read_u16())
-    time.sleep(1)
+# while True:
+#     speed = adc.read_u16()
+#     motorMove(speed/65535*100, 1, pwmPIN, cwPin, acwPin)
+#     print(adc.read_u16())
+#     time.sleep(1)
 
-#stop pumping
-#motorMove(0, 1, pwmPIN, cwPin, acwPin)
+
+motorMove(0, 1, pwmPIN, cwPin, acwPin)
   
    

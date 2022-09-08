@@ -73,14 +73,12 @@ def readTemp():
 photoPIN = 26
 
 
-def readLight():
+def readOD():
     photoRes = ADC(Pin(photoPIN))
     light = photoRes.read_u16()
     light = round(light/65535*100, 2)
     od = -math.log10((100-light)/100)
     return od
-while True:
-    print(readLight())
 
 
 # oled display
