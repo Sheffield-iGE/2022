@@ -59,7 +59,7 @@ def pumpPower(power):
 
 
 # temp sensor
-ds_pin = machine.Pin(21)
+ds_pin = Pin(21)
 ds_sensor = ds18x20.DS18X20(onewire.OneWire(ds_pin))
 rom = ds_sensor.scan()[0]
 
@@ -72,12 +72,13 @@ def readTemp():
 # phototransistor
 photoPIN = 26
 
-
-def readOD():
+def readintensity():
     photoRes = ADC(Pin(photoPIN))
-    light = photoRes.read_u16()
-    light = round(light/65535*100, 2)
-    od = -math.log10((100-light)/100)
+    intensity = photoRes.read_u16()
+    return intensity
+
+def readOD(i1, i2):
+    od = -math.log10(i1/i2)
     return od
 
 
