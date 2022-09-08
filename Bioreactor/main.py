@@ -1,7 +1,7 @@
 from time import sleep, time_ns, time, ticks_us, ticks_diff
 from drivers import *
 
-stirringtimer = ticks_us()
+stirringtimer = time()
 pidtimer = ticks_us()
 i1 = readintensity()
 esum = 0
@@ -34,32 +34,7 @@ while True:
     display.text("light: " + str(readOD(i1, i2)), 5, 5, 1)
     display.text("temp : " + str(round(readTemp(), 1)) + "C", 5, 14, 1)
     display.show()
-#     sleep(0.3)
 
-#     print(p + error + i * esum)
-# 
-#     if readTemp() < 37:
-#         heatingPower(100)
-#     elif readTemp() < 37:
-#         esum = 0
-#         target_temp = 37
-#         p = 1
-#         i = 0.01
-#         error = target_temp - readTemp()
-#         esum += error
-#         heatingPower((p * error + i * esum) * 10)
-#         print(p + error + i * esum)
-#     elif readTemp() > 37:
-#         heatingPower(0)
-#     else:
-#         esum = 0
-#         target_temp = 37
-#         p = 1
-#         i = 0.01
-#         error = target_temp - readTemp()
-#         esum += error
-#         heatingPower((p * error + i * esum) * 100)
-#         print((p * error + i * esum) * 100)
     if readOD(i1, i2) > 0.5:
         speed = adcpump.read_u16()
         pumpPower(speed/65535*100)
