@@ -55,7 +55,8 @@ gdf = groupby(pdf, :Replicate)
 # ╔═╡ ed22a327-aba2-421b-9dfb-b2b30ba01e9c
 begin
 	# Pick a replicate to zero in on
-	curve = 7
+	curve = 16
+
 	# Replot, but focusing on a single curve
 	plot(gdf[curve], x=:Time, y=:OD, color=:Replicate,
 		 Scale.color_discrete_hue, Scale.y_log2,
@@ -65,7 +66,7 @@ end
 
 # ╔═╡ f4a76b84-f624-4c9d-ac4a-3ada4e96a721
 # Trim the data to take a closer look at log-phase
-logdf = filter(:Time => t -> 120 <= t <= 200, gdf[curve])
+logdf = filter(:Time => t -> 120 <= t <= 180, gdf[curve])
 
 # ╔═╡ 542d02b1-51f2-40f2-bbaa-94c758e4406a
 # Log-transform the OD data
@@ -136,7 +137,7 @@ Gadfly = "~1.3.4"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.8.0"
+julia_version = "1.8.1"
 manifest_format = "2.0"
 project_hash = "f84076edcaf929d916555b8da577d9c82906668c"
 
