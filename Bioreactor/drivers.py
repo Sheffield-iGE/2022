@@ -38,9 +38,9 @@ def driveHBridge(speed, direction, speedGP, cwGP, acwGP):
 
 
 # heating coil
-pwmheat = 4
+pwmheat = 2
 cwPinheat = 3
-acwPinheat = 2
+acwPinheat = 4
 
 
 def heatingPower(power):
@@ -49,7 +49,7 @@ def heatingPower(power):
 
 # pump , max speed = 60mL/min
 adcpump = ADC(Pin(27))
-pwmpump = 16
+pwmpump = 13
 cwPinpump = 14
 acwPinpump = 15
 
